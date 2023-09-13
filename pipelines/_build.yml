@@ -1,0 +1,45 @@
+parameters:
+- name: buildAppCommand
+  type: string
+
+steps:
+  - template: _runtime.yml
+  - template: _outdated-packages.yml
+  - template: _audit-packages.yml
+  - template: _install-dependencies.yml
+
+  - script: npm run lint
+    displayName: "✏️ Run lint"
+
+  - script: npm run prettier:write
+    displayName: "🎨 Run prettier"
+
+  - task: Npm@1
+    displayName: "🏗️ Build app"
+    inputs:
+      command: custom
+      customCommand: ${{ parameters.buildAppCommand }}
+      workingDir: "$(Build.SourcesDirectory)"
+      verbose: false
+
+  - task: Npm@1
+    displayName: "✅ Run unitary tests"
+    inputs:
+      command: custom
+      customCommand: "run test:coverage"
+      workingDir: "$(Build.SourcesDirectory)"
+      verbose: false
+
+  - task: PublishCodeCoverageResults@1
+    displayName: "📢 Publish unitary tests results"
+    inputs:
+      codeCoverageTool: Cobertura
+      summaryFileLocation: $(Build.SourcesDirectory)/coverage/cobertura-coverage.xml
+
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish artifact: dist'
+    inputs:
+      ArtifactName: 'dist'
+      PathtoPublish: $(System.DefaultWorkingDirectory)/dist
+          
+

@@ -1,0 +1,13 @@
+steps:
+  - task: PowerShell@2
+    displayName: Run outdated
+    inputs:
+      targetType: 'inline'
+      script: pipelines/_outdated-packages.ps1 -FailOnOutdatedPackages $False > outdated.txt
+
+  - task: PublishBuildArtifacts@1
+    displayName: Publish outdated artifact
+    condition: succeededOrFailed()
+    inputs:
+      ArtifactName: "outdated"
+      PathtoPublish: "outdated.txt"

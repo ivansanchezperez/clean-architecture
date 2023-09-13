@@ -1,0 +1,23 @@
+parameters:
+  environmentName: ''
+
+jobs:
+  - deployment: VMDeploy_Test
+    displayName: 🚀 Deploy to SPA VM Test
+    dependsOn: []
+    environment: 
+      name: Shrmbx-Test
+      resourceType: virtualMachine
+      resourceName: SHRDMBX-FET
+    variables:
+      - group: "CD-SPA-Integration-${{ parameters.environmentName }}"
+    strategy:
+      runOnce:
+        deploy:   
+          steps:
+            - task: DownloadPipelineArtifact@2
+              displayName: "Download artifact"
+              inputs:
+                artifact: "dist"
+                patterns: '**/*'
+                path: $(deployment_path)

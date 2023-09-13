@@ -1,0 +1,15 @@
+steps:
+  - task: PowerShell@2
+    displayName: Read node version from package.json
+    inputs:
+      targetType: 'inline'
+      script: |
+        $packageJsonContent = Get-Content package.json | ConvertFrom-Json
+        $nodeVersion = $packageJsonContent.engines.node
+        Write-Host "##vso[task.setvariable variable=nodeVersion;]$nodeVersion"
+
+  - task: NodeTool@0
+    displayName: 'Install Node.js'
+    inputs:
+      versionSpec: $(nodeVersion)
+      checkLatest: false

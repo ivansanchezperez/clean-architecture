@@ -1,0 +1,23 @@
+parameters:
+  environmentName: ''
+
+jobs:
+  - deployment: VMDeploy_Production
+    displayName: 🚀 Deploy to SPA VM Production
+    dependsOn: []
+    environment: 
+      name: Shrmbx-Prod
+      resourceType: virtualMachine
+      resourceName: SHRDMBX-FE
+    variables:
+      - group: "CD-SPA-Integration-${{ parameters.environmentName }}"
+    strategy:
+      runOnce:
+        deploy:   
+          steps:
+            - task: DownloadPipelineArtifact@2
+              displayName: "Download artifact"
+              inputs:
+                artifact: "dist"
+                patterns: '**/*'
+                path: $(deployment_path)

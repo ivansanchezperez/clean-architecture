@@ -1,0 +1,42 @@
+trigger:
+  branches:
+    include:
+      - master
+
+pool:
+  vmImage: ubuntu-latest
+
+stages:
+  - stage: Build_Test
+    jobs:
+      - job: Quality
+        timeoutInMinutes: 20
+        displayName: Quality job
+        steps:
+          - template: _build.yml
+            parameters:
+              buildAppCommand: "run build:test"
+
+  - stage: Deploy_Test
+    dependsOn: Build_Test
+    jobs:
+      - template: _deploy-test.yml
+        parameters:
+          environmentName: "Test"
+
+  - stage: Build_Production
+    dependsOn: Deploy_Test    
+    jobs:
+      - job: BuildProduction
+        displayName: Build Production
+        steps:
+          - template: _build.yml
+            parameters:
+              buildAppCommand: "run build:production"
+
+  - stage: Deploy_Production
+    dependsOn: Build_Production
+    jobs:
+      - template: _deploy.yml
+        parameters:
+          environmentName: "Prod"

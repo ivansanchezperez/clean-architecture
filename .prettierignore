@@ -1,0 +1,8 @@
+dist
+*.yml
+*.bundle.js
+*.bundle.js.map
+*.barrel.ts
+*.vscode
+*.node_modules
+package-lock.json

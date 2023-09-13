@@ -1,0 +1,15 @@
+steps:
+  - task: Cache@2
+    displayName: "🔃 Cache packages"
+    inputs:
+      cacheHitVar: CACHE_RESTORED
+      path: $(Build.SourcesDirectory)/node_modules
+      key: 'npm | "$(Agent.OS)" | $(Build.SourcesDirectory)/package-lock.json'
+
+  - task: Npm@1
+    displayName: "📦️ Install packages"
+    inputs:
+      workingDir: "$(Build.SourcesDirectory)"
+      verbose: false
+      customCommand: "npm ci"
+    condition: ne(variables.CACHE_RESTORED, 'true')

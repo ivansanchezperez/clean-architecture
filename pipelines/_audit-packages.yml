@@ -1,0 +1,13 @@
+steps:
+  - task: PowerShell@2
+    displayName: Run audit
+    inputs:
+      targetType: 'inline'
+      script: pipelines/_audit-packages.ps1 -MaxSeverityLevel Moderate > audit.txt
+
+  - task: PublishBuildArtifacts@1
+    displayName: Publish audit artifact
+    condition: succeededOrFailed()
+    inputs:
+      ArtifactName: "audit"
+      PathtoPublish: "audit.txt"

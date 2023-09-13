@@ -1,0 +1,25 @@
+{
+	"compilerOptions": {
+		"experimentalDecorators": true,
+		"emitDecoratorMetadata": true,
+		"target": "es5",
+		"useDefineForClassFields": true,
+		"lib": ["DOM", "DOM.Iterable", "ES2015"],
+		"allowJs": false,
+		"checkJs": false,
+		"skipLibCheck": true,
+		"esModuleInterop": true,
+		"allowSyntheticDefaultImports": true,
+		"strict": true,
+		"forceConsistentCasingInFileNames": true,
+		"module": "ESNext",
+		"moduleResolution": "Node",
+		"resolveJsonModule": true,
+		"isolatedModules": true,
+		"noEmit": true,
+		"jsx": "react-jsx",
+		"strictPropertyInitialization": false
+	},
+	"include": ["src", "setupTests.ts"],
+	"references": [{ "path": "./tsconfig.node.json" }]
+}

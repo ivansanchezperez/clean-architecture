@@ -1,0 +1,21 @@
+name: $(Date:yyyy.MM.dd)$(Rev:.rr)
+
+trigger:
+  branches:
+    exclude:
+      - master
+
+pool:
+  vmImage: ubuntu-latest
+
+stages:
+  - stage: Quality
+    displayName: 💎 Quality
+    jobs:
+      - job: Quality
+        timeoutInMinutes: 20
+        displayName: Quality job
+        steps:
+          - template: _build.yml
+            parameters:
+              buildAppCommand: "run build"
